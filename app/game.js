@@ -7,6 +7,8 @@ function clamp(x, min, max){
     return x;
 }
 
+
+
 module.exports = class Game extends EventEmitter {
     constructor(columns, rows) {
         super(); 
@@ -19,7 +21,8 @@ module.exports = class Game extends EventEmitter {
             Math.floor(this._rows / 2),
             this._makeRandomHue()
         )
-
+        this._connected = false;
+        this._points = [];
         this._players = {};
         this._players[this._player.id] = this._player;
     }
@@ -51,37 +54,58 @@ module.exports = class Game extends EventEmitter {
         p.strokeWeight(0);
         p.colorMode(p.HSB);
 
-        const playersAsArray = Object.values(this._players);
-        playersAsArray.forEach(player => {
-            p.fill(player.color);
-            p.rect(
-                player.x * cellWidth,
-                player.y * cellHeight,
-                cellWidth,
-                cellHeight
-            );
-        });
+        // // Draw all players
+        // const playersAsArray = Object.values(this._players);
+        // playersAsArray.forEach(player => {
+        //     p.fill(player.color);
+        //     p.rect(
+        //         player.x * cellWidth,
+        //         player.y * cellHeight,
+        //         cellWidth,
+        //         cellHeight
+        //     );
+        // });
+
+        // Draw single player
         
-        p.pop();
-    }
-    _movePlayer(dx, dy){
-        this._player.x = clamp(this._player.x + dx, 0, this._columns - 1);
-        this._player.y = clamp(this._player.y + dy, 0, this._rows - 1);
-
-        this.emit("playerMoved", this._player); 
-    }
-
-    handleKey(key) {
-        if(key === "ArrowLeft"){
-            this._movePlayer(-1, 0);
-        } else if(key === "ArrowRight"){
-            this._movePlayer(1, 0);
-        } else if(key === "ArrowUp"){
-            this._movePlayer(0, -1);
-        } else if(key === "ArrowDown"){
-            this._movePlayer(0, 1);
+        const player = this._players[this._player.id]
+        let point = {
+            x : player.x,
+            y : player.y
+        };
+        this._points.push(point);
+        if(this._points.length > 50){
+            this._points.splice(0,1);
+        }
+        for(let i = 0; i < this._points.length; i ++){
+            p.fill(this._player.color);
+            p.ellipse(
+                this._points[i].x, 
+                this._points[i].y,
+                i,
+                i
+            );
         }
 
+        p.pop();
+    }
+
+    _movePlayer(x, y){
+        // Player to mouse position clamp on window width, height
+        this._player.x = clamp(x, 0, 400);
+        this._player.y = clamp(y, 0, 400);
+        if(this._connected) this.emit("playerMoved", this._player);
+    }
+
+    connectPlayer(){
+        this._connected = true;
+    }
+    disconnectPlayer(){
+        this._connected = false;
+    }
+
+    handleMouse(p){
+        this._movePlayer(p.mouseX, p.mouseY);
     }
 
     updatePlayers(players) {

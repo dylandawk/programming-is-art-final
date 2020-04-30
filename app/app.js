@@ -23,6 +23,7 @@ const sketch = (p) => {
     })
     gameClient.on("connected", () =>{
         gameClient.sendPlayer(game._player);
+        game.connectPlayer();
     })
 
     p.setup = () => {
@@ -45,12 +46,8 @@ const sketch = (p) => {
 
         // Draw the game
         game.draw(p, cellWidth, cellHeight);
+        game.handleMouse(p);
         
-        
-    }
-
-    p.keyPressed = () =>{
-        game.handleKey(p.key)
     }
 }
 
