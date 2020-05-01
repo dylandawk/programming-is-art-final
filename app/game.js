@@ -77,6 +77,7 @@ module.exports = class Game extends EventEmitter {
             this._points.splice(0,1);
         }
         for(let i = 0; i < this._points.length; i ++){
+            p.noStroke();
             p.fill(this._player.color);
             p.ellipse(
                 this._points[i].x, 
@@ -104,7 +105,9 @@ module.exports = class Game extends EventEmitter {
     }
 
     scaleEllipse(event){
-        ellipseScale = event.scale;
+
+        ellipseScale = clamp(ellipseScale * event.scale, 0, 4);
+        
     }
 
     handleMouse(p){
