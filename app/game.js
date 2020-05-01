@@ -7,7 +7,7 @@ function clamp(x, min, max){
     return x;
 }
 
-let ellipseScale = 1;
+let ellipseScale = 4;
 let ellipseX = 200;
 let ellipseY = 200;
 
@@ -21,6 +21,7 @@ module.exports = class Game extends EventEmitter {
         this._player = this._makePlayer(
             Math.floor(this._columns / 2),
             Math.floor(this._rows / 2),
+            1,
             this._makeRandomHue()
         )
         this._connected = false;
@@ -41,11 +42,12 @@ module.exports = class Game extends EventEmitter {
     }
 
     // Make a new player object out of a position and a color
-    _makePlayer(px, py, color) {
+    _makePlayer(px, py, pz, color) {
         return {
             id: uuidv4(),
             x: px,
             y: py,
+            z: pz,
             color
         };
     }
@@ -72,7 +74,8 @@ module.exports = class Game extends EventEmitter {
         const player = this._players[this._player.id]
         let point = {
             x : player.x,
-            y : player.y
+            y : player.y,
+            z : player.z
         };
         this._points.push(point);
         if(this._points.length > 15){
@@ -86,8 +89,8 @@ module.exports = class Game extends EventEmitter {
             p.ellipse(
                 ellipseX, 
                 ellipseY,
-                ellipseScale * i * 4,
-                ellipseScale * i * 4
+                this._points[i].z * i * ellipseScale,
+                this._points[i].z * i * ellipseScale
             );
         }
 
@@ -110,8 +113,8 @@ module.exports = class Game extends EventEmitter {
 
     scaleEllipse(event){
         //how to scale properly?
-        ellipseScale = clamp(ellipseScale + ((event.scale -1)*0.5), 0.2, 4);
-        console.log(ellipseScale);
+        this._player.z = clamp(this._player.z + ((event.scale -1)*0.5), 0.2, 4);
+        console.log(this._player.z);
     }
 
     handleMouse(p){
