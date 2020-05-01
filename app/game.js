@@ -8,6 +8,8 @@ function clamp(x, min, max){
 }
 
 let ellipseScale = 1;
+let ellipseX = 200;
+let ellipseY = 200;
 
 module.exports = class Game extends EventEmitter {
     constructor(columns, rows) {
@@ -73,17 +75,19 @@ module.exports = class Game extends EventEmitter {
             y : player.y
         };
         this._points.push(point);
-        if(this._points.length > 50){
+        if(this._points.length > 15){
             this._points.splice(0,1);
         }
         for(let i = 0; i < this._points.length; i ++){
             p.noStroke();
             p.fill(this._player.color);
+            ellipseX += (this._points[i].x - ellipseX)*.1;
+            ellipseY += (this._points[i].y - ellipseY)*.1;
             p.ellipse(
-                this._points[i].x, 
-                this._points[i].y,
-                ellipseScale * i,
-                ellipseScale * i
+                ellipseX, 
+                ellipseY,
+                ellipseScale * i * 4,
+                ellipseScale * i * 4
             );
         }
 
@@ -105,9 +109,9 @@ module.exports = class Game extends EventEmitter {
     }
 
     scaleEllipse(event){
-        
-        ellipseScale = clamp(ellipseScale + ((event.scale -1) * 0.25), 5, 4);
-        
+        //how to scale properly?
+        ellipseScale = clamp(ellipseScale + ((event.scale -1)*0.5), 0.2, 4);
+        console.log(ellipseScale);
     }
 
     handleMouse(p){
