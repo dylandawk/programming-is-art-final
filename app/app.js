@@ -1,7 +1,9 @@
 const p5 = require("p5");
-//const Hammer = require("hammerjs");
 const Game = require("./game");
 const GameClient = require("./gameClient");
+
+
+
 
 const width = 400;
 const height = 400;
@@ -26,6 +28,14 @@ const sketch = (p) => {
         gameClient.sendPlayer(game._player);
         game.connectPlayer();
     })
+
+    // Multi-touch Gestures
+    let options = {
+        preventDefault: true
+      };
+    let hammer = new Hammer(document.body, options);
+    hammer.get('pinch').set({enable: true});
+    hammer.on("pinch", game.scaleEllipse);
 
     p.setup = () => {
         p.createCanvas(400, 400);

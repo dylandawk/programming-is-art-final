@@ -7,7 +7,7 @@ function clamp(x, min, max){
     return x;
 }
 
-let ellipseScale = 4;
+let ellipseScale = 1;
 
 module.exports = class Game extends EventEmitter {
     constructor(columns, rows) {
@@ -101,6 +101,10 @@ module.exports = class Game extends EventEmitter {
     }
     disconnectPlayer(){
         this._connected = false;
+    }
+
+    scaleEllipse(event){
+        ellipseScale = event.scale;
     }
 
     handleMouse(p){
