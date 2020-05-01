@@ -4,7 +4,7 @@ module.exports = class GameClient extends EventEmitter {
     constructor(){
         super();
         const pageUrl = new URL(window.location);
-        pageUrl.protocol = "ws";
+        pageUrl.protocol = "wss";
         console.log("Attempting to listen to: " + pageUrl.toString());
         this._websocket = new WebSocket(pageUrl.toString());
 
