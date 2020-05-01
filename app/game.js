@@ -106,7 +106,7 @@ module.exports = class Game extends EventEmitter {
 
     scaleEllipse(event){
 
-        ellipseScale = clamp(ellipseScale * event.scale, 0, 4);
+        ellipseScale = clamp(ellipseScale + event.scale -1, 0, 4);
         
     }
 
