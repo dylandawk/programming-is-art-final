@@ -1,4 +1,5 @@
 const p5 = require("p5");
+//const Hammer = require("hammerjs");
 const Game = require("./game");
 const GameClient = require("./gameClient");
 

@@ -7,7 +7,7 @@ function clamp(x, min, max){
     return x;
 }
 
-
+let ellipseScale = 4;
 
 module.exports = class Game extends EventEmitter {
     constructor(columns, rows) {
@@ -67,7 +67,6 @@ module.exports = class Game extends EventEmitter {
         // });
 
         // Draw single player
-        
         const player = this._players[this._player.id]
         let point = {
             x : player.x,
@@ -82,8 +81,8 @@ module.exports = class Game extends EventEmitter {
             p.ellipse(
                 this._points[i].x, 
                 this._points[i].y,
-                i,
-                i
+                ellipseScale * i,
+                ellipseScale * i
             );
         }
 
