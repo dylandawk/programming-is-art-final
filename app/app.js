@@ -20,6 +20,7 @@ const sketch = (p) => {
     let gameClient = new GameClient();
     game.on("playerMoved", player => {
         gameClient.sendPlayer(player);
+        console.log("player Moved");
     });
     gameClient.on("players", players => {
         game.updatePlayers(players);

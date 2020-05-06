@@ -118,7 +118,9 @@ module.exports = class Game extends EventEmitter {
     }
 
     handleMouse(p){
-        this._movePlayer(p.mouseX, p.mouseY);
+        p.touchStarted = () => {
+            this._movePlayer(p.mouseX, p.mouseY);
+        } 
     }
 
     updatePlayers(players) {
